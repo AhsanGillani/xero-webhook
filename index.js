@@ -8,7 +8,7 @@ app.use(express.raw({ type: "*/*" }));
 
 app.get("/", (req, res) => 
   { 
-    res.send("Umar Amjad - Server is running with reference of php ✅"); 
+    res.send("Umar Amjad - Server is running with decoded key of binary ✅"); 
   });
 
 app.post("/xero-webhook", (req, res) => {
@@ -16,13 +16,19 @@ app.post("/xero-webhook", (req, res) => {
     const webhookKey = "YOUR_XERO_WEBHOOK_KEY";
     const rawBody = req.body.toString("utf8");
 
+ // ✅ Decode the base64 key first!
+
+    const binaryKey = Buffer.from(webhookKey, "base64");
+
+
     const computedSignature = crypto
-      .createHmac("sha256", webhookKey)
+      .createHmac("sha256", binaryKey)
       .update(rawBody)
       .digest("base64");
 
     const xeroSignature = req.header("x-xero-signature");
 
+    
     console.log("🧠 Raw Body:", rawBody);
     console.log("🧾 Computed:", computedSignature);
     console.log("📦 Xero Header:", xeroSignature);
