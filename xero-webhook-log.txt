@@ -1,0 +1,26 @@
+{
+  "timestamp": "2025-10-15T06:53:08.471Z",
+  "headers": {
+    "content-type": "application/json; charset=utf-8",
+    "user-agent": "XeroWebhooks/1.0",
+    "x-xero-signature": "/kY0/inC86EzJE3qz3jYNsUMonobsCHSYJE2i/F91RM=",
+    "cf-ray": "98e48399580ffc57-IAD",
+    "host": "latest-fire-safety.bubbleapps.io",
+    "cf-visitor": "{\"scheme\":\"https\"}",
+    "cf-ipcountry": "US",
+    "cf-connecting-ip": "52.20.64.83",
+    "x-forwarded-for": "52.20.64.83,::ffff:172.70.39.78",
+    "accept-encoding": "gzip, br",
+    "x-forwarded-proto": "https,https",
+    "connection": "Keep-Alive",
+    "x-forwarded-port": "443",
+    "x-forwarded-host": "latest-fire-safety.bubbleapps.io",
+    "accept": "*/*",
+    "postman-token": "71faf654-835d-49dc-87c7-b844a800d97b",
+    "content-length": "124"
+  },
+  "rawBody": "{\r\n    \"events\": [],\r\n    \"firstEventSequence\": 0,\r\n    \"lastEventSequence\": 0,\r\n    \"entropy\": \"RWEMLPWZUOTPNRIURZIY\"\r\n  } ",
+  "computedSignature": "Dcip6pp+Lgaqk9iXla4Iz383Zrfq0wq4noCAt1s/Is0=",
+  "xeroSignature": "/kY0/inC86EzJE3qz3jYNsUMonobsCHSYJE2i/F91RM="
+}
+
