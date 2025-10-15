@@ -16,7 +16,7 @@ app.get("/", (req, res) => {
 app.post("/xero-webhook", (req, res) => {
   try {
     // Your Xero Webhook Key (from developer portal)
-    const webhookKey = "--YOUR_WEBHOOK_KEY--";
+    const webhookKey = "UVNUi7YLWohgxY39vpvZyeFCxzLLbt8edk7MF9b5JNVLrrmq0xD4bZlwuW58hzI3V3YB5YHt2XFeDPw4AEG2hw==";
 
     // Get the raw payload
     const rawBody = req.body.toString("utf8");
