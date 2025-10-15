@@ -8,12 +8,12 @@ app.use(express.raw({ type: "*/*" }));
 
 app.get("/", (req, res) => 
   { 
-    res.send("Umar Amjad - Server is running with decoded key of binary ✅"); 
+    res.send("Umar Amjad - Server is running with webhook key ✅"); 
   });
 
 app.post("/xero-webhook", (req, res) => {
   try {
-    const webhookKey = "YOUR_XERO_WEBHOOK_KEY";
+    const webhookKey = "UVNUi7YLWohgxY39vpvZyeFCxzLLbt8edk7MF9b5JNVLrrmq0xD4bZlwuW58hzI3V3YB5YHt2XFeDPw4AEG2hw==";
     const rawBody = req.body.toString("utf8");
 
  // ✅ Decode the base64 key first!
