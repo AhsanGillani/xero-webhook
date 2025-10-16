@@ -10,17 +10,17 @@ app.use(express.raw({ type: "*/*" }));
 async function handleXeroPayload(parsedBody) {
   try {
     // Log all events locally
-    parsedBody.events.forEach((event, i) => {
-      console.log(`Event #${i + 1}`);
-      console.log("Resource URL:", event.resourceUrl);
-      console.log("Event Type:", event.eventType);
-      console.log("Category:", event.eventCategory);
-      console.log("Tenant ID:", event.tenantId);
-    });
+    // parsedBody.events.forEach((event, i) => {
+    //   console.log(`Event #${i + 1}`);
+    //   console.log("Resource URL:", event.resourceUrl);
+    //   console.log("Event Type:", event.eventType);
+    //   console.log("Category:", event.eventCategory);
+    //   console.log("Tenant ID:", event.tenantId);
+    // });
 
-    console.log("🚀 Sending data to Bubble...");
+    console.log("🚀 Sendingggg data to Bubble...");
 
-    const response = await axios.post("https://saqccfire.co.za/version-test/api/1.1/wf/xero-webhook",
+    const response = await axios.post("https://latest-fire-safety.bubbleapps.io/version-test/api/1.1/wf/xero-webhook/initialize",
       {
         test: true,
         source: "vercel",
@@ -169,7 +169,7 @@ app.get("/ping-bubble", async (req, res) => {
   try {
     console.log("Request to ping to bubble");
 
-    const response = await axios.post("https://saqccfire.co.za/version-test/api/1.1/wf/xero-webhook/initialize",
+    const response = await axios.post("https://latest-fire-safety.bubbleapps.io/version-test/api/1.1/wf/xero-webhook/initialize",
       {
         test: true,
         source: "vercel",
