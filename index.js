@@ -159,4 +159,16 @@ app.post("/test", (req, res) => {
   }
 });
 
+
+app.get("/ping-bubble", async (req, res) => {
+  try {
+    const response = await axios.post("https://saqccfire.co.za/version-test/api/1.1/wf/xero-webhook/initialize");
+    res.json({ status: response.status, data: response.data });
+  } catch (err) {
+    res.json({ error: err.message, code: err.code });
+  }
+});
+
+
+
 app.listen(3000, () => console.log("🚀 Xero webhook listening on port 3000"));
