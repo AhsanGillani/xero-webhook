@@ -22,7 +22,12 @@ async function handleXeroPayload(parsedBody) {
 
     console.log("🚀 Sending data to Bubble...");
 
-    const response = await axios.post(bubbleUrl, parsedBody, {
+    const response = await axios.post(bubbleUrl,  
+      {
+    test: true,
+    source: "vercel",
+    message: "Hello from SAQCC live server",
+  }, {
       headers: { "Content-Type": "application/json" },
       timeout: 8000, // 8 seconds timeout (adjust if needed)
     });
@@ -164,7 +169,17 @@ app.get("/ping-bubble", async (req, res) => {
   try {
     console.log("Request to ping to bubble");
     
-    const response = await axios.post("https://saqccfire.co.za/version-test/api/1.1/wf/xero-webhook/initialize");
+    const response = await axios.post("https://saqccfire.co.za/version-test/api/1.1/wf/xero-webhook/initialize",
+      {
+    test: true,
+    source: "vercel",
+    message: "Hello from SAQCC live server",
+  },
+  {
+    headers: { "Content-Type": "application/json" },
+    timeout: 8000,
+  }
+    );
     res.json({ status: response.status, data: response.data });
   } catch (err) {
     res.json({ error: err.message, code: err.code });
