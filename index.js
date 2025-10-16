@@ -18,20 +18,18 @@ async function handleXeroPayload(parsedBody) {
       console.log("Tenant ID:", event.tenantId);
     });
 
-    //const bubbleUrl = "https://saqccfire.co.za/version-test/api/1.1/wf/xero-webhook/initialize"; // <-- replace if needed
-
     console.log("🚀 Sending data to Bubble...");
 
-      const response = await axios.post("https://saqccfire.co.za/version-test/api/1.1/wf/xero-webhook/initialize",
+    const response = await axios.post("https://saqccfire.co.za/version-test/api/1.1/wf/xero-webhook",
       {
-    test: true,
-    source: "vercel",
-    message: "Hello from SAQCC live server",
-  },
-  {
-    headers: { "Content-Type": "application/json" },
-    timeout: 8000,
-  }
+        test: true,
+        source: "vercel",
+        message: "Hello from SAQCC live server",
+      },
+      {
+        headers: { "Content-Type": "application/json" },
+        timeout: 8000,
+      }
     );
 
     console.log("✅ Bubble Response:", response.data);
@@ -57,19 +55,19 @@ app.get("/", (req, res) => {
 app.post("/xero-webhook", (req, res) => {
   try {
 
-    
+
     console.log("📝 We are in SAQCC's Actual XERO Account");
-    
+
     const webhookKey = "UVNUi7YLWohgxY39vpvZyeFCxzLLbt8edk7MF9b5JNVLrrmq0xD4bZlwuW58hzI3V3YB5YHt2XFeDPw4AEG2hw==";
     const rawBody = req.body.toString("utf8");
-let parsedBody;
+    let parsedBody;
     try {
       parsedBody = JSON.parse(rawBody);
     } catch {
       parsedBody = {};
     }
 
-// ✅ CASE 1: Xero sends actual events
+    // ✅ CASE 1: Xero sends actual events
     if (parsedBody?.events?.length > 0) {
       console.log("📢 Received Events:", parsedBody.events.length);
       handleXeroPayload(parsedBody);
@@ -78,36 +76,36 @@ let parsedBody;
 
     // ✅ CASE 2: Validation ping (no events)
     console.log("ℹ️ No events in payload. Doing validation...");
-      const computedSignature = crypto
-        .createHmac("sha256", webhookKey)
-        .update(rawBody)
-        .digest("base64");
+    const computedSignature = crypto
+      .createHmac("sha256", webhookKey)
+      .update(rawBody)
+      .digest("base64");
 
-      const xeroSignature = req.header("x-xero-signature");
+    const xeroSignature = req.header("x-xero-signature");
 
-      
-    
-      console.log("🧠 Raw Body:", rawBody);
-      console.log("🧾 Computed:", computedSignature);
-      console.log("📦 Xero Header:", xeroSignature);
 
-      if (!xeroSignature) return res.status(400).send("Missing signature");
 
-      const computedBuffer = Buffer.from(computedSignature);
-      const xeroBuffer = Buffer.from(xeroSignature);
+    console.log("🧠 Raw Body:", rawBody);
+    console.log("🧾 Computed:", computedSignature);
+    console.log("📦 Xero Header:", xeroSignature);
 
-      if (computedBuffer.length !== xeroBuffer.length) {
-        console.log("⚠️ Signature length mismatch");
-        return res.status(401).send("Invalid signature (length mismatch)");
-      }
+    if (!xeroSignature) return res.status(400).send("Missing signature");
 
-      if (crypto.timingSafeEqual(computedBuffer, xeroBuffer)) {
-        console.log("✅ Signature verified successfully!");
-        return res.status(200).send("Intent to receive");
-      } else {
-        console.log("❌ Signature mismatch");
-        return res.status(401).send("Invalid signature");
-      
+    const computedBuffer = Buffer.from(computedSignature);
+    const xeroBuffer = Buffer.from(xeroSignature);
+
+    if (computedBuffer.length !== xeroBuffer.length) {
+      console.log("⚠️ Signature length mismatch");
+      return res.status(401).send("Invalid signature (length mismatch)");
+    }
+
+    if (crypto.timingSafeEqual(computedBuffer, xeroBuffer)) {
+      console.log("✅ Signature verified successfully!");
+      return res.status(200).send("Intent to receive");
+    } else {
+      console.log("❌ Signature mismatch");
+      return res.status(401).send("Invalid signature");
+
     }
   } catch (error) {
     console.error("💥 Error verifying signature:", error);
@@ -125,9 +123,9 @@ app.post("/test", (req, res) => {
     const webhookKey = "lbd1kg0bOJpWYKO4Z0n6VYl5Yh30lxJ29/cDPSXtYGnWl7BJKL/UkoOvpkMCZGeNldEjgFkx71UgeLsuwt5Vyw==";
     const rawBody = req.body.toString("utf8");
 
- // ✅ Decode the base64 key first!
+    // ✅ Decode the base64 key first!
 
-  //  const binaryKey = Buffer.from(webhookKey, "base64");
+    //  const binaryKey = Buffer.from(webhookKey, "base64");
 
 
     const computedSignature = crypto
@@ -138,7 +136,7 @@ app.post("/test", (req, res) => {
     const xeroSignature = req.header("x-xero-signature");
 
     console.log("📝 We are in Umar's Test XERO Account");
-    
+
     console.log("🧠 Raw Body:", rawBody);
     console.log("🧾 Computed:", computedSignature);
     console.log("📦 Xero Header:", xeroSignature);
@@ -170,17 +168,17 @@ app.post("/test", (req, res) => {
 app.get("/ping-bubble", async (req, res) => {
   try {
     console.log("Request to ping to bubble");
-    
+
     const response = await axios.post("https://saqccfire.co.za/version-test/api/1.1/wf/xero-webhook/initialize",
       {
-    test: true,
-    source: "vercel",
-    message: "Hello from SAQCC live server",
-  },
-  {
-    headers: { "Content-Type": "application/json" },
-    timeout: 8000,
-  }
+        test: true,
+        source: "vercel",
+        message: "Hello from SAQCC live server",
+      },
+      {
+        headers: { "Content-Type": "application/json" },
+        timeout: 8000,
+      }
     );
     res.json({ status: response.status, data: response.data });
   } catch (err) {
