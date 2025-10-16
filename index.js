@@ -1,10 +1,10 @@
 const express = require("express");
 const crypto = require("crypto");
 const app = express();
+const axios = require("axios");
 
 // Capture raw body
 app.use(express.raw({ type: "*/*" }));
-
 
 
 async function handleXeroPayload(parsedBody) {
@@ -18,23 +18,30 @@ async function handleXeroPayload(parsedBody) {
       console.log("Tenant ID:", event.tenantId);
     });
 
-    // Send the entire payload to your Bubble API endpoint
-    const bubbleUrl = "https://saqccfire.co.za/version-test/api/1.1/wf/xero-webhook/initialize"; // <-- replace this
+    const bubbleUrl = "https://saqccfire.co.za/version-test/api/1.1/wf/xero-webhook/initialize"; // <-- replace if needed
 
     console.log("🚀 Sending data to Bubble...");
 
-    const response = await fetch(bubbleUrl, {
-      method: "POST",
+    const response = await axios.post(bubbleUrl, parsedBody, {
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(parsedBody),
+      timeout: 8000, // 8 seconds timeout (adjust if needed)
     });
 
-    const resultText = await response.text();
-    console.log("✅ Bubble Response:", resultText);
+    console.log("✅ Bubble Response:", response.data);
   } catch (error) {
-    console.error("❌ Error sending data to Bubble:", error);
+    if (error.response) {
+      // Bubble replied with error code (4xx, 5xx)
+      console.error("❌ Bubble Error Response:", error.response.status, error.response.data);
+    } else if (error.request) {
+      // No response received
+      console.error("❌ No response from Bubble:", error.message);
+    } else {
+      // Setup error (bad URL, network issue, etc.)
+      console.error("💥 Axios setup error:", error.message);
+    }
   }
 }
+
 
 app.get("/", (req, res) => {
   res.send("Umar Amjad - Server is running with webhook key ✅");
@@ -44,7 +51,7 @@ app.post("/xero-webhook", (req, res) => {
   try {
 
     
-    console.log("📝 We are in SAQCC's Test XERO Account");
+    console.log("📝 We are in SAQCC's Actual XERO Account");
     
     const webhookKey = "UVNUi7YLWohgxY39vpvZyeFCxzLLbt8edk7MF9b5JNVLrrmq0xD4bZlwuW58hzI3V3YB5YHt2XFeDPw4AEG2hw==";
     const rawBody = req.body.toString("utf8");
@@ -102,6 +109,10 @@ let parsedBody;
 });
 
 
+
+
+//The following is just for tetsing to know. Original one is above
+
 app.post("/test", (req, res) => {
   try {
     const webhookKey = "lbd1kg0bOJpWYKO4Z0n6VYl5Yh30lxJ29/cDPSXtYGnWl7BJKL/UkoOvpkMCZGeNldEjgFkx71UgeLsuwt5Vyw==";
@@ -119,7 +130,7 @@ app.post("/test", (req, res) => {
 
     const xeroSignature = req.header("x-xero-signature");
 
-    console.log("📝 We are in Umar's Test XERO Account Not Actual");
+    console.log("📝 We are in Umar's Test XERO Account");
     
     console.log("🧠 Raw Body:", rawBody);
     console.log("🧾 Computed:", computedSignature);
