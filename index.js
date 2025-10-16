@@ -158,7 +158,7 @@ app.post("/xero-webhook", async (req, res) => {
     // ✅ CASE 1: Xero sends actual events
     if (parsedBody?.events?.length > 0) {
       console.log("📢 Received Events:", parsedBody.events.length);
-      handleXeroPayload(parsedBody);
+     await handleXeroPayload(parsedBody);
       return res.status(200).send("Events received");
     }
 
