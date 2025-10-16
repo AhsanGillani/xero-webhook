@@ -162,6 +162,8 @@ app.post("/test", (req, res) => {
 
 app.get("/ping-bubble", async (req, res) => {
   try {
+    console.log("Request to ping to bubble");
+    
     const response = await axios.post("https://saqccfire.co.za/version-test/api/1.1/wf/xero-webhook/initialize");
     res.json({ status: response.status, data: response.data });
   } catch (err) {
