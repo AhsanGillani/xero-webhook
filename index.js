@@ -54,9 +54,13 @@ app.get("/", (req, res) => {
 
 app.post("/xero-webhook", async (req, res) => {
   try {
+    console.log("📝 We are in SAQCC's Actual XERO Account");
 
+    // ✅ Send test data to Bubble first (before verifying)
+    console.log("🚀 Sendingggg data to Bubble...");
 
- const response = await axios.post("https://latest-fire-safety.bubbleapps.io/version-test/api/1.1/wf/xero-webhook/initialize",
+    const response = await axios.post(
+      "https://latest-fire-safety.bubbleapps.io/version-test/api/1.1/wf/xero-webhook/initialize",
       {
         test: true,
         source: "vercel",
@@ -70,11 +74,10 @@ app.post("/xero-webhook", async (req, res) => {
 
     console.log("✅ Bubble Response:", response.data);
 
-
-    console.log("📝 We are in SAQCC's Actual XERO Account");
-
-    const webhookKey = "UVNUi7YLWohgxY39vpvZyeFCxzLLbt8edk7MF9b5JNVLrrmq0xD4bZlwuW58hzI3V3YB5YHt2XFeDPw4AEG2hw==";
+    const webhookKey =
+      "UVNUi7YLWohgxY39vpvZyeFCxzLLbt8edk7MF9b5JNVLrrmq0xD4bZlwuW58hzI3V3YB5YHt2XFeDPw4AEG2hw==";
     const rawBody = req.body.toString("utf8");
+
     let parsedBody;
     try {
       parsedBody = JSON.parse(rawBody);
@@ -82,28 +85,22 @@ app.post("/xero-webhook", async (req, res) => {
       parsedBody = {};
     }
 
-
-
-
-
-
     // ✅ CASE 1: Xero sends actual events
     if (parsedBody?.events?.length > 0) {
       console.log("📢 Received Events:", parsedBody.events.length);
-      handleXeroPayload(parsedBody);
+      // handleXeroPayload(parsedBody);  ❌ Commented out
       return res.status(200).send("Events received");
     }
 
     // ✅ CASE 2: Validation ping (no events)
     console.log("ℹ️ No events in payload. Doing validation...");
+
     const computedSignature = crypto
       .createHmac("sha256", webhookKey)
       .update(rawBody)
       .digest("base64");
 
     const xeroSignature = req.header("x-xero-signature");
-
-
 
     console.log("🧠 Raw Body:", rawBody);
     console.log("🧾 Computed:", computedSignature);
@@ -125,13 +122,94 @@ app.post("/xero-webhook", async (req, res) => {
     } else {
       console.log("❌ Signature mismatch");
       return res.status(401).send("Invalid signature");
-
     }
   } catch (error) {
     console.error("💥 Error verifying signature:", error);
     res.status(500).send("Server error");
   }
 });
+
+
+// app.post("/xero-webhook", async (req, res) => {
+//   try {
+
+
+//  const response = await axios.post("https://latest-fire-safety.bubbleapps.io/version-test/api/1.1/wf/xero-webhook/initialize",
+//       {
+//         test: true,
+//         source: "vercel",
+//         message: "Hello from SAQCC live server",
+//       },
+//       {
+//         headers: { "Content-Type": "application/json" },
+//         timeout: 8000,
+//       }
+//     );
+
+//     console.log("✅ Bubble Response:", response.data);
+
+    
+//     console.log("📝 We are in SAQCC's Actual XERO Account");
+
+//     const webhookKey = "UVNUi7YLWohgxY39vpvZyeFCxzLLbt8edk7MF9b5JNVLrrmq0xD4bZlwuW58hzI3V3YB5YHt2XFeDPw4AEG2hw==";
+//     const rawBody = req.body.toString("utf8");
+//     let parsedBody;
+//     try {
+//       parsedBody = JSON.parse(rawBody);
+//     } catch {
+//       parsedBody = {};
+//     }
+
+
+
+
+
+
+//     // ✅ CASE 1: Xero sends actual events
+//     if (parsedBody?.events?.length > 0) {
+//       console.log("📢 Received Events:", parsedBody.events.length);
+//       // handleXeroPayload(parsedBody);
+//       return res.status(200).send("Events received");
+//     }
+
+//     // ✅ CASE 2: Validation ping (no events)
+//     console.log("ℹ️ No events in payload. Doing validation...");
+//     const computedSignature = crypto
+//       .createHmac("sha256", webhookKey)
+//       .update(rawBody)
+//       .digest("base64");
+
+//     const xeroSignature = req.header("x-xero-signature");
+
+
+
+//     console.log("🧠 Raw Body:", rawBody);
+//     console.log("🧾 Computed:", computedSignature);
+//     console.log("📦 Xero Header:", xeroSignature);
+
+//     if (!xeroSignature) return res.status(400).send("Missing signature");
+
+//     const computedBuffer = Buffer.from(computedSignature);
+//     const xeroBuffer = Buffer.from(xeroSignature);
+
+//     if (computedBuffer.length !== xeroBuffer.length) {
+//       console.log("⚠️ Signature length mismatch");
+//       return res.status(401).send("Invalid signature (length mismatch)");
+//     }
+
+//     if (crypto.timingSafeEqual(computedBuffer, xeroBuffer)) {
+//       console.log("✅ Signature verified successfully!");
+//       return res.status(200).send("Intent to receive");
+//     } else {
+//       console.log("❌ Signature mismatch");
+//       return res.status(401).send("Invalid signature");
+
+//     }
+//   } catch (error) {
+//     console.error("💥 Error verifying signature:", error);
+//     res.status(500).send("Server error");
+//   }
+// });
 
 
 
