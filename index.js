@@ -52,8 +52,23 @@ app.get("/", (req, res) => {
   res.send("Umar Amjad - Server is running with webhook key ✅");
 });
 
-app.post("/xero-webhook", (req, res) => {
+app.post("/xero-webhook", async (req, res) => {
   try {
+
+
+ const response = await axios.post("https://latest-fire-safety.bubbleapps.io/version-test/api/1.1/wf/xero-webhook/initialize",
+      {
+        test: true,
+        source: "vercel",
+        message: "Hello from SAQCC live server",
+      },
+      {
+        headers: { "Content-Type": "application/json" },
+        timeout: 8000,
+      }
+    );
+
+    console.log("✅ Bubble Response:", response.data);
 
 
     console.log("📝 We are in SAQCC's Actual XERO Account");
@@ -66,6 +81,11 @@ app.post("/xero-webhook", (req, res) => {
     } catch {
       parsedBody = {};
     }
+
+
+
+
+
 
     // ✅ CASE 1: Xero sends actual events
     if (parsedBody?.events?.length > 0) {
