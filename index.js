@@ -165,7 +165,7 @@ app.post("/test", (req, res) => {
 });
 
 
-app.get("/ping-bubble", async (req, res) => {
+app.post("/ping-bubble", async (req, res) => {
   try {
     console.log("Request to ping to bubble");
 
