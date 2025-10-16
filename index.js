@@ -18,19 +18,21 @@ async function handleXeroPayload(parsedBody) {
       console.log("Tenant ID:", event.tenantId);
     });
 
-    const bubbleUrl = "https://saqccfire.co.za/version-test/api/1.1/wf/xero-webhook/initialize"; // <-- replace if needed
+    //const bubbleUrl = "https://saqccfire.co.za/version-test/api/1.1/wf/xero-webhook/initialize"; // <-- replace if needed
 
     console.log("🚀 Sending data to Bubble...");
 
-    const response = await axios.post(bubbleUrl,  
+      const response = await axios.post("https://saqccfire.co.za/version-test/api/1.1/wf/xero-webhook/initialize",
       {
     test: true,
     source: "vercel",
     message: "Hello from SAQCC live server",
-  }, {
-      headers: { "Content-Type": "application/json" },
-      timeout: 8000, // 8 seconds timeout (adjust if needed)
-    });
+  },
+  {
+    headers: { "Content-Type": "application/json" },
+    timeout: 8000,
+  }
+    );
 
     console.log("✅ Bubble Response:", response.data);
   } catch (error) {
