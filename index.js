@@ -20,7 +20,7 @@ async function handleXeroPayload(parsedBody) {
 
     console.log("🚀 Sendingggg data to Bubble...");
 
-    const response = await axios.post("https://latest-fire-safety.bubbleapps.io/version-test/api/1.1/wf/xero-webhook/initialize", parsedBody);
+    const response = await axios.post("https://latest-fire-safety.bubbleapps.io/version-test/api/1.1/wf/xero-webhook", parsedBody);
 
     console.log("✅ Bubble Response:", response.data);
   } catch (error) {
